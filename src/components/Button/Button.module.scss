@@ -1,0 +1,57 @@
+@import '../../assets/styles/variables';
+%outline {
+  outline: 2px solid var(--color-blue);
+  outline-offset: 2px;
+}
+
+.btn {
+  background-color: var(--color-blue);
+  font-size: 1.125rem;
+  opacity: 0.8;
+  color: white;
+  font-style: $button-fontStyle;
+  font-weight: $button-fontWeight;
+  line-height: $button-lineHeight;
+  text-transform: capitalize;
+  text-align: center;
+  border: none;
+  width: $button-regular-width;
+  height: $button-regular-height;
+  border-radius: $button-regular-radius;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition-duration: 0.4s;
+  transition-property: background-color, color;
+
+  &__span {
+    display: flex;
+    pointer-events: none;
+    white-space: nowrap;
+  }
+
+  &.small {
+    font-size: $button-small-fontSize;
+    width: $button-small-width;
+    height: $button-small-height;
+    border-radius: $button-small-radius;
+  }
+
+  &.mouse {
+    outline: none;
+  }
+
+  &:hover {
+    opacity: 0.9;
+  }
+  &:active {
+    opacity: 1;
+  }
+  &:disabled {
+    background-color: var(--color-primary-dark);
+    cursor: not-allowed;
+  }
+  &:focus {
+    @extend %outline;
+  }
+}

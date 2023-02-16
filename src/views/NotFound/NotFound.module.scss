@@ -1,0 +1,20 @@
+@import '../../assets/styles/main.scss';
+.notResult {
+  &__section {
+    display: grid;
+    background-color: var(--color-white);
+    grid-template-rows: 10rem;
+    grid-template-columns: [full-start] 1rem [center-start] minmax(min-content, 1fr) [center-end] 1rem [full-end];
+    justify-content: center;
+    align-items: center;
+    column-gap: 1rem;
+    padding: 1rem;
+  }
+  &__card {
+    grid-column: center-start/center-end;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+  }
+}

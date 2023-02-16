@@ -1,0 +1,16 @@
+.searchResult {
+  padding: 0;
+  width: 100%;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  ul {
+    list-style: none;
+    width: 100%;
+    li:hover,
+    li:focus {
+      // background-color: var(--color-primary-light);
+      text-decoration: none;
+    }
+  }
+}

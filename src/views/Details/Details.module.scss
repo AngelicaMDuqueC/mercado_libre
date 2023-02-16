@@ -1,0 +1,110 @@
+@import '../../assets/styles/main.scss';
+
+.details {
+  &__section {
+    display: grid;
+    background-color: var(--color-white);
+    grid-template-rows: repeat(2, minmax(min-content, 1fr));
+    grid-template-columns: [full-start] 2rem [center-start] minmax(42rem, 90%) [center-end] 2rem [full-end];
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    column-gap: 1rem;
+    & *:first-letter {
+      text-transform: uppercase;
+    }
+    @include respond(tab-port) {
+      grid-template-rows: repeat(2, minmax(min-content, 1fr));
+      grid-template-columns: minmax(42rem, 1fr);
+    }
+    @include respond(phone) {
+      grid-template-columns: minmax(20rem, 1fr);
+      grid-template-rows: repeat(2, minmax(min-content, 50%));
+      row-gap: 1rem;
+    }
+  }
+  &__card {
+    grid-column: center-start/center-end;
+    grid-row: 1/2;
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    margin-top: 2rem;
+    gap: 2rem;
+    @include respond(tab-port) {
+      flex-direction: column;
+      grid-column: 1/-1;
+      align-self: center;
+    }
+    @include respond(phone) {
+      align-self: flex-start;
+    }
+  }
+  &__description {
+    grid-column: center-start/center-end;
+    grid-row: 2/ -1;
+    * {
+      margin-bottom: 2rem;
+    }
+    @include respond(tab-port) {
+      grid-column: 1/-1;
+      grid-row: 2;
+      align-self: baseline;
+      margin-top: 1rem;
+    }
+  }
+  &__heading {
+    font-size: $h2-fontSize;
+    font-weight: normal;
+  }
+  &__paragraph {
+    font-size: 1rem;
+    text-align: justify;
+  }
+  .card__text {
+    display: flex;
+    flex-direction: column;
+    align-content: flex-start;
+    flex: 1 1 30%;
+    gap: 0.875rem;
+    @include respond(tab-port) {
+      flex-flow: row wrap;
+      justify-content: space-between;
+      padding: 1rem;
+    }
+
+    & .card__price {
+      font-size: $h1-fonstSize;
+      margin: calc(2rem - 0.875rem) 0;
+      line-height: 1;
+      font-weight: lighter;
+      @include respond(tab-port) {
+        width: 50%;
+        margin: 0;
+      }
+    }
+    & .card__title {
+      font-size: $h3-fontSize;
+      font-weight: bold;
+      margin-top: calc(1rem - 0.875rem);
+    }
+    & .card__tags {
+      font-size: $tabs-fontSize;
+      font-weight: normal;
+      @include respond(tab-port) {
+        flex: 1 1 100%;
+      }
+    }
+    & .card__btn {
+      margin-right: 2rem;
+      @include respond(tab-port) {
+        align-self: flex-end;
+      }
+    }
+    & .card__img {
+      flex: 1 1 70%;
+      max-width: 44rem;
+      text-align: center;
+    }
+  }
+}

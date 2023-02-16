@@ -1,0 +1,53 @@
+@import '../../assets/styles/main.scss';
+%content {
+  grid-template-columns:
+    [left-start] 1rem [left-end full-start] minmax(1rem, 1fr) [center-start] 4rem repeat(
+      9,
+      [col-start] minmax(min-content, 14rem) [col-end]
+    )
+    [center-end] minmax(1rem, 1fr) [full-end rigth-start] 1rem [rigth-end];
+}
+.layout {
+  display: grid;
+  background-color: var(--color-primary-light);
+  grid-template-rows: 20vh minmax(min-content, 10vh) minmax(80vh, max-content);
+  @extend %content;
+  height: auto;
+  min-height: 100vh;
+}
+
+.header {
+  background-color: var(--color-yellow);
+  grid-column: left-start / rigth-end;
+  grid-row: 1/2;
+  display: grid;
+  @extend %content;
+  justify-content: center;
+  align-items: center;
+  &__logo {
+    grid-column: center-start / col-start 1;
+    justify-self: flex-start;
+    background-image: url('public/images/Logo_ML@2x.png');
+    background-size: contain;
+    background-position: left;
+    background-repeat: no-repeat;
+    width: 44px;
+    height: 44px;
+    @include respond(tab-port) {
+      background-image: url('public/images/Logo_ML.png');
+      width: 30px;
+      height: 30px;
+    }
+  }
+}
+
+.header__search {
+  grid-column: col-start 1 / center-end;
+  justify-self: center;
+  width: 100%;
+}
+
+.main__content {
+  grid-column: center-start / center-end;
+  grid-row: 3 /-1;
+}
