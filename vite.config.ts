@@ -21,5 +21,9 @@ export default defineConfig({
         includePaths: ['src/assets/styles']
       }
     }
+  },
+  server: {
+    host: true,
+    port: 3000
   }
 });
