@@ -19,7 +19,7 @@ export const PATHS = new Map([
   ['SEARCH', '/items?search=']
 ]);
 
-export const FETCHPATH = new Map([['SEARCH_ITEMS', 'sites/MLA/search?limit=10&q=']]);
+export const FETCHPATH = new Map([['SEARCH_ITEMS', 'sites/MLA/search?limit=4&q=']]);
 
 export const placeholder = 'Ingresa lo que quieras encontrar';
 
