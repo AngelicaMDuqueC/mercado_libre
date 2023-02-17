@@ -52,22 +52,24 @@ run` npx cypress open`
 
 [Page reload on dev server is very slow in large codebase](https://github.com/vitejs/vite/issues/7608)
 
-### Use Pick ister of Partial
+#### Use Pick ister of Partial
 
 in some componets I used Partial to not complicate my work but should be Pick
 
-## added img for search btn
+#### added img for search btn
 
 I didn't have the time to add the img to the btn
 
-## created more unit testing
+#### created more unit testing
 
 some componet didn't have unit testing
 
-## use RenderList component into Search List
+#### use RenderList component into Search List
 
 I didn't have the time to make the changes
 
-## add documentation into componets
+#### add documentation into componets
 
 I didn't have the time to implent it into all componets but I use typeScript that help with it
+
+#### a better loader
