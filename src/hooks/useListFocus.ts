@@ -1,42 +1,89 @@
-import { useCallback, useState, useEffect } from 'react';
-import { UseFormSetFocus, FieldValues, Path } from 'react-hook-form';
+import { useCallback, useState, useEffect, RefObject } from 'react';
+import { FieldValues, Path, PathValue, UseFormReturn } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
+import { PATHS } from 'utils';
 
-export const useListFocus = <T extends FieldValues>(focusedInput: UseFormSetFocus<T>, key: Path<T>) => {
-  const [size, setSize] = useState(0);
+export const useListFocus = <T extends FieldValues>(
+  ref: RefObject<HTMLDivElement>,
+  listValues: PathValue<T, Path<T>>[],
+  formMethods: UseFormReturn<T>,
+  key: Path<T>
+) => {
+  const { setValue, setFocus, watch } = formMethods;
   const [currentFocus, setCurrentFocus] = useState<number | null>(null);
+  const [selectedValue, setSelectedValue] = useState<PathValue<T, Path<T>> | null>(null);
+  const [size, setSize] = useState(0);
+  const inputValue = watch(key);
+
+  const navigate = useNavigate();
+  const handleNavigate = (value: any) => {
+    const searchPath = PATHS.get('SEARCH');
+    const path = `${searchPath}${encodeURIComponent(value)}`;
+    navigate(path);
+  };
+
+  const handleManual = (value: PathValue<T, Path<T>>) => {
+    setValue(key, value);
+    handleNavigate(value);
+    setCurrentFocus(null);
+  };
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
-      if (e.key === 'ArrowDown') {
-        e.preventDefault();
-        if (currentFocus !== null) {
-          setCurrentFocus(currentFocus < size - 1 ? currentFocus + 1 : 0);
-        } else {
-          setCurrentFocus(0);
-        }
-      } else if (e.key === 'ArrowUp') {
-        e.preventDefault();
-        if (currentFocus !== null) {
-          setCurrentFocus(currentFocus > 0 ? currentFocus - 1 : size - 1);
-        } else {
-          setCurrentFocus(size - 1);
-        }
-      } else {
-        setCurrentFocus(null);
-        focusedInput(key);
+      switch (e.key) {
+        case 'ArrowDown':
+          e.preventDefault();
+          if (currentFocus !== null) {
+            const newFocusIndex = currentFocus < size - 1 ? currentFocus + 1 : 0;
+            setCurrentFocus(newFocusIndex);
+            setValue(key, listValues[newFocusIndex]);
+          } else {
+            setCurrentFocus(0);
+            setValue(key, listValues[0]);
+          }
+          break;
+
+        case 'ArrowUp':
+          e.preventDefault();
+          if (currentFocus !== null) {
+            const newFocusIndex = currentFocus > 0 ? currentFocus - 1 : size - 1;
+            setCurrentFocus(currentFocus > 0 ? currentFocus - 1 : size - 1);
+            setValue(key, listValues[newFocusIndex]);
+          } else {
+            setCurrentFocus(size - 1);
+            setValue(key, listValues[size - 1]);
+          }
+          break;
+
+        case 'Enter':
+          e.preventDefault();
+          setCurrentFocus(null);
+          setSelectedValue(inputValue);
+          handleNavigate(inputValue);
+          break;
+        default:
+          setCurrentFocus(null);
+          setFocus(key);
+          break;
       }
     },
-    [size, currentFocus, setCurrentFocus]
+    [size, currentFocus, setCurrentFocus, listValues]
   );
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown, false);
+    const element = ref.current;
+    element?.addEventListener('keydown', handleKeyDown, false);
     return () => {
-      document.removeEventListener('keydown', handleKeyDown, false);
+      element?.removeEventListener('keydown', handleKeyDown, false);
     };
   }, [handleKeyDown]);
 
-  return [currentFocus, setSize] as [number, React.Dispatch<React.SetStateAction<number>>];
+  return [selectedValue, handleManual, currentFocus, setSize] as [
+    PathValue<T, Path<T>>,
+    any,
+    number,
+    React.Dispatch<React.SetStateAction<number>>
+  ];
 };
 
 export default useListFocus;

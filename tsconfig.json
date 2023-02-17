@@ -15,11 +15,9 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "react-jsx",
-    "baseUrl": "src"
+    "baseUrl": "src",
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
-  "include": [
-    "vite.config.ts",
-    "src"
-  ],
+  "include": ["vite.config.ts", "src"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

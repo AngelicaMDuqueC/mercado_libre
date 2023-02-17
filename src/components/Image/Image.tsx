@@ -3,29 +3,20 @@ import styles from './Image.module.scss';
 export type ImageResurce = {
   imgSrc: string;
   title: string;
-  srcSmall?: string;
   className?: string;
 };
 /**
  * Function to load the image
- * @param src  src for the image
- * @returns Promise with  a img element
+ * @param imgSrc  src for the image
+ * @param title alt for the image
+ * @param className class css to customizar img
+ * @returns img element
  */
-export const Image = ({ imgSrc, title, srcSmall, className }: ImageResurce) => {
-  console.log(imgSrc);
+export const Image = ({ imgSrc, title, className }: ImageResurce) => {
   return (
     <div className={className}>
-      <div className={styles['img-wrapper']}>
-        {srcSmall ? (
-          <img
-            srcSet={`${srcSmall} 300w, ${imgSrc} 1000w`}
-            alt={title}
-            className="composition__photo composition__photo--p1"
-            src={imgSrc}
-          />
-        ) : (
-          <img alt={title} className="composition__photo composition__photo--p1" src={imgSrc} />
-        )}
+      <div className={styles['img-wrapper']} data-testis="card-img">
+        <img alt={title} className="composition__photo composition__photo--p1" src={imgSrc} />
       </div>
     </div>
   );

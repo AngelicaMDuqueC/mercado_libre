@@ -1,11 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useAxios } from 'hooks/useAxios';
-import { useForm, SubmitHandler } from 'react-hook-form';
+import { useForm } from 'react-hook-form';
 import { useListFocus } from 'hooks/useListFocus';
 import { List } from 'components/Search/List';
 import styles from './Search.module.scss';
-// import { RenderList } from 'components/RenderList';
-// import { Card } from 'components';
 
 type FormInputs = {
   search: string;
@@ -15,118 +13,55 @@ type SearchBarProps = {
   placeholder: string;
 };
 
-type SugestedQuery = {
-  match_end: number;
-  match_start: number;
-  q: string;
-};
-
-type AutosuggestReponse = {
-  q: string;
-  suggested_queries: SugestedQuery[];
-};
-
-export type Item = {
-  id: string;
-  title: string;
-  condition: string;
-  category_id: string;
-  thumbnail: string;
-  currency_id: string;
-  price: number;
-  tags: string[];
-  shipping: {
-    free_shipping: false;
-  };
-  seller: {
-    id: number;
-    nickname: string;
-  };
-  pictures: {
-    id: string;
-    url: string;
-    secure_url: string;
-    size: string;
-    max_size: string;
-    quality: string;
-  }[];
-};
-
-type Filter = {
-  id: string;
-  name: string;
-  values: [
-    {
-      id: string;
-      name: string;
-      path_from_root: [
-        {
-          id: string;
-          name: string;
-        }
-      ];
-    }
-  ];
-};
-
-type SearchResult = {
-  site_id: string;
-  query: string;
-  results: Item[];
-  filters: Filter;
-};
-
 const label = 'Ingresa lo que quieras encontrar';
 
-export const Search = ({ placeholder }: SearchBarProps) => {
-  const { register, handleSubmit, watch, setFocus } = useForm<FormInputs>();
-  const [suggestedQueries, setSuggestedQueries] = useState<string[]>([]);
-  const [searchItems, setSearchItems] = useState<Item[]>([]);
-  const [focusedIndex, setListSize] = useListFocus<FormInputs>(setFocus, 'search');
-  const search = watch('search');
-  const { response, error, loading, fetchData } = useAxios();
+// TODO: add doc and fix issue with the click on the list
+//TODO: use the renderList
+// add styles
 
+export const Search = ({ placeholder }: SearchBarProps) => {
+  const formMethods = useForm<FormInputs>();
+  const { register, watch } = formMethods;
+
+  const divRef = useRef<HTMLDivElement>(null);
+  const [suggestedQueries, setSuggestedQueries] = useState<string[]>([]);
+  const [openSugestions, setOpenSugestions] = useState(false);
+  const [selectedQuery, setSelectedQuery, focusedIndex, setListSize] = useListFocus<FormInputs>(
+    divRef,
+    suggestedQueries,
+    formMethods,
+    'search'
+  );
+  const { response, fetchData } = useAxios();
+  const search = watch('search');
   const getSuggestionsQueries = async () => {
     const path = `sites/MLA/autosuggest?limit=6&q=${encodeURIComponent(search)}`;
     await fetchData(path);
-    const { suggested_queries } = response as AutosuggestReponse;
-    const sugestions = suggested_queries.map(({ q }) => q);
-    setSuggestedQueries(sugestions);
-    setListSize(sugestions.length);
-  };
-
-  const getSearchItems = async (search: string) => {
-    console.log({ search });
-    const searchQuery = focusedIndex === null ? search : suggestedQueries[focusedIndex];
-    const path = `sites/MLA/search?limit=10&q=${encodeURIComponent(searchQuery)}`;
-    await fetchData(path);
-  };
-
-  const onSubmitHandler: SubmitHandler<FormInputs> = async ({ search }) => {
-    try {
-      getSearchItems(search);
-    } catch (error) {
-      console.error('hubo error');
+    if (response) {
+      const { suggested_queries } = response as unknown as AutosuggestReponse;
+      const sugestions = suggested_queries.map(({ q }) => q);
+      setSuggestedQueries(sugestions);
+      setOpenSugestions(true);
+      setListSize(sugestions.length);
     }
   };
 
   useEffect(() => {
-    if (search) {
+    if (search && focusedIndex === null) {
       getSuggestionsQueries();
+    }
+    if (search?.length === 0) {
+      setSuggestedQueries([]);
     }
   }, [search]);
 
   useEffect(() => {
-    console.log(response);
-    if (response && 'results' in response) {
-      const { results } = response as SearchResult;
-      setSearchItems(results);
-    }
-  }, [response]);
+    setOpenSugestions(false);
+  }, [selectedQuery]);
 
   return (
-    <>
-      <form role="search" onSubmit={handleSubmit(onSubmitHandler)} className={styles.searchForm}>
+    <div ref={divRef}>
+      <form role="search" className={styles.searchForm}>
         <div className={styles.search}>
           <input
             {...register('search')}
@@ -135,26 +70,28 @@ export const Search = ({ placeholder }: SearchBarProps) => {
             aria-label={label}
             placeholder={placeholder}
             autoComplete={'off'}
+            onFocus={() => {
+              if (search?.length > 0) {
+                setOpenSugestions(true);
+              }
+            }}
           />
+          {/* TODO: add Icon */}
           <button type="submit" className={styles.search__button}>
-            <span className={styles.search__icon} />
+            search
           </button>
         </div>
-        <div className={styles.searchResult}>
-          <List focusedIndex={focusedIndex} results={suggestedQueries} />
-        </div>
+        {openSugestions && (
+          <div className={styles.searchResult}>
+            <List
+              focusedIndex={focusedIndex}
+              results={suggestedQueries}
+              setOpenSugestions={setOpenSugestions}
+              setSelectedQuery={setSelectedQuery}
+            />
+          </div>
+        )}
       </form>
-      {/* {searchItems && (
-        <RenderList
-          searchItems={searchItems}
-          render={(item: any) => {
-            <Card item={item}>
-              <Card.CardImg title={item.title} imgSrc={item.thumbnail} />
-              <Card.PriceAndTitle />
-            </Card>;
-          }}
-        />
-      )} */}
-    </>
+    </div>
   );
 };

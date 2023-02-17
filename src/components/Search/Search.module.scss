@@ -43,23 +43,9 @@
     border: none;
     @extend %padding;
     background-color: var(--color-primary-light);
-
     &:focus {
       outline: none;
     }
-
-    &:active {
-      transform: translateY(2px);
-    }
-  }
-
-  &__icon {
-    background-image: url('../../assets/images/IcSearch.svg');
-    background-repeat: no-repeat;
-    background-position: 12px 12px;
-    height: 2rem;
-    width: 2rem;
-    fill: var(--color-black);
   }
 }
 

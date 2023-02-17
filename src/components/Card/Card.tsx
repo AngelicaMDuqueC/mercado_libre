@@ -1,18 +1,14 @@
 import { createContext, useContext, PropsWithChildren } from 'react';
-import { Item } from 'components/Search/Search';
 import { CustomHeading } from 'components/CustomHeading';
 import { Image } from 'components/Image';
-import ErrorBoundary from 'components/ErrorBoundary/ErrorBoundary';
+import { ErrorBoundary } from 'components/ErrorBoundary';
 
 type CardContext = {
-  item?: Item;
+  // todo: use pick inster of Partial
+  item: Partial<Item>;
   className?: string;
-  cssClassCard?: {
-    classCard?: string;
-    classTag?: string;
-    classTitle?: string;
-    classPrice?: string;
-  };
+  cssClassCard?: Partial<CardCssClass>;
+  onClick?: any;
 };
 
 const CardContext = createContext<CardContext>({} as CardContext);
@@ -27,41 +23,33 @@ export const useCard = () => {
 };
 
 export const Card = (props: PropsWithChildren<CardContext>) => {
-  console.log({ props });
   return (
     <CardContext.Provider value={props}>
       <ErrorBoundary>
-        <div className={props.className}>{props.children}</div>
+        <div className={props.className} onClick={props.onClick} data-testid="card-div">
+          {props.children}
+        </div>
       </ErrorBoundary>
     </CardContext.Provider>
   );
 };
 
-type Props = {
-  classCard?: string;
-  classTag?: string;
-  classTitle?: string;
-  classPrice?: string;
-};
-
-const PriceAndTitle = ({ children }: PropsWithChildren<Props>) => {
+const PriceAndTitle = ({ children }: PropsWithChildren) => {
   const {
     item: { price, title, tags },
     cssClassCard
   } = useCard();
-  console.log(useCard());
-  console.log(price, title, tags);
   const { classCard, classTag, classTitle, classPrice } = cssClassCard || {};
-  const transfromTags = tags ? tags[0].replace(/_/g, ' ') : '';
+  const transfromTags = tags?.length ? tags?.join(' ').replace(/_/g, ' ') : '';
   return (
     <div className={`${classCard ?? ''}`}>
       {transfromTags && (
-        <CustomHeading type="span" customClass={classTag}>
+        <CustomHeading type="span" customClass={classTag} data-testid="price-heading">
           {transfromTags}
         </CustomHeading>
       )}
       {title && (
-        <CustomHeading type="h3" customClass={classTitle}>
+        <CustomHeading type="h3" customClass={classTitle} data-testid="title-heading">
           {title}
         </CustomHeading>
       )}

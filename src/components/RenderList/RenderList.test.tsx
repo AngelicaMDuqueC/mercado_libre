@@ -1,19 +1,18 @@
 import { render } from '@testing-library/react';
 import { RenderList } from './RenderList';
-import { Item } from 'hooks/useAxios';
 
 describe('RenderList', () => {
   test('renders the search results correctly', () => {
-    const searchItems = [
-      { id: 1, title: 'Item 1' },
-      { id: 2, title: 'Item 2' },
-      { id: 3, title: 'Item 3' }
+    const searchItems: Partial<Item>[] = [
+      { id: '1', title: 'Item 1' },
+      { id: '2', title: 'Item 2' },
+      { id: '3', title: 'Item 3' }
     ];
 
     const { container } = render(
       <RenderList
-        searchItems={searchItems}
-        render={(item: Item) => {
+        itemList={searchItems}
+        render={(item) => {
           return <div>{item.title}</div>;
         }}
       />

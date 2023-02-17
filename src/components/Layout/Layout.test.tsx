@@ -1,18 +1,19 @@
 import { render } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import { Layout } from './Layout';
 
 describe('Layout', () => {
-  test('renders the header and main content', () => {
-    const childText = 'Child content';
-    const placeholderText = 'placeholdr';
-
-    const { getByText, getByPlaceholderText } = render(
-      <Layout>
-        <div>{childText}</div>
-      </Layout>
+  it('renders without crashing', () => {
+    const { getByTestId } = render(
+      <BrowserRouter>
+        <Layout />
+      </BrowserRouter>
     );
 
-    expect(getByText(childText)).toBeInTheDocument();
-    expect(getByPlaceholderText(placeholderText)).toBeInTheDocument();
+    const layoutDiv = getByTestId('layout-div');
+    expect(layoutDiv).toBeInTheDocument();
+
+    const mainContent = getByTestId('main-content');
+    expect(mainContent).toBeInTheDocument();
   });
 });

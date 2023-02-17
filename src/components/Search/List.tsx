@@ -1,12 +1,18 @@
 import { PropsWithChildren, useEffect, useRef } from 'react';
+
 // import styles from './Search.module.scss';
 
 type ListElementProps = PropsWithChildren<{
   isFocused: boolean;
+  onClick: any;
 }>;
+const callAll =
+  (...fns: any[]) =>
+  (...args: any) =>
+    fns.forEach((fn) => fn?.(...args));
 
 const ListElement = (props: ListElementProps) => {
-  const { children, isFocused, ...rest } = props;
+  const { children, isFocused, onClick } = props;
   const localRef = useRef<HTMLLIElement>(null);
 
   useEffect(() => {
@@ -16,7 +22,7 @@ const ListElement = (props: ListElementProps) => {
   }, [isFocused]);
 
   return (
-    <li ref={localRef} tabIndex={isFocused ? 0 : -1} {...rest}>
+    <li ref={localRef} tabIndex={isFocused ? 0 : -1} onClick={callAll(onClick)}>
       {children}
     </li>
   );
@@ -24,14 +30,23 @@ const ListElement = (props: ListElementProps) => {
 
 type ListProps = {
   results: string[];
-  focusedIndex: number;
+  focusedIndex: number | null;
+  setOpenSugestions: any;
+  setSelectedQuery: any;
 };
 
-export const List = ({ results, focusedIndex }: ListProps) => {
+export const List = ({ results, focusedIndex, setOpenSugestions, setSelectedQuery }: ListProps) => {
   return (
     <ul>
       {results.map((result, index) => (
-        <ListElement key={result} isFocused={index === focusedIndex}>
+        <ListElement
+          key={result}
+          isFocused={index === focusedIndex}
+          onClick={() => {
+            setSelectedQuery(result);
+            setOpenSugestions(false);
+          }}
+        >
           {result}
         </ListElement>
       ))}

@@ -1,7 +1,7 @@
 import { renderHook, waitFor, act } from '@testing-library/react';
 import { vi } from 'vitest';
 import axios from 'axios';
-import { useAxios, Item } from './useAxios';
+import { useAxios } from './useAxios';
 
 vi.spyOn(axios, 'get').mockImplementation((path: string) => {
   if (path === 'invalid_path') {

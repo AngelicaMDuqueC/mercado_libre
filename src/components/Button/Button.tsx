@@ -2,10 +2,6 @@ import React, { useState, HTMLProps, useEffect, ReactElement, useCallback } from
 import { mergeStrings } from 'utils/index';
 import styles from './Button.module.scss';
 
-type BtnSize = 'regular' | 'small';
-type BtnType = 'button' | 'submit' | 'reset';
-type IconPlace = 'left' | 'right';
-
 type ButtonProps = {
   text?: string;
   icon?: ReactElement<SVGAElement>;
