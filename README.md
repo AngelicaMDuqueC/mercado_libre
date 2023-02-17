@@ -39,11 +39,12 @@ run` npx cypress open`
 
 ## Determined architecture
 
-- Atomic desing to resue compoents
-- typesCripte to help whit documentation and project scalability
-- Used vite to inital and esay setup
-- uniti testing with vite library and '@testing-library/react and cypress as E2E
-- Sass as preprocess of css and Destoks first desagin
+- Atomic desing to reuse compoents
+- TypeScript to help with code organization and maintainability.
+- using a fast and easy setup tool Vite to help in the get started.
+- Unit tests with libraries: '@testing-library/react' vites and using Cypress for end-to-end testing to ensure that mercaldo_libre project is functioning as expected and catch any issues early on.
+- Using Sass as a preprocessor for CSS can help make styling more modular and reusable
+- Designing with a focus on desktop first to ensure that the project looks and functions well on larger screens before scaling down to smaller devices.
 
 ## ISSUES
 
