@@ -17,13 +17,10 @@ export const DetailsView = () => {
   const [item, setItem] = useState<Partial<Item> | null>(null);
   const [descripton, setDescription] = useState<ResponseDescription | null>(null);
   const { response: itemResponse } = useAxios(`/items/${encodeURIComponent(itemPath)}`);
-  console.log(`/items/${encodeURIComponent(itemPath)}/description`);
-
   const { response: descriptionData } = useAxios(`/items/${encodeURIComponent(itemPath)}/description`);
 
   useEffect(() => {
     if (itemResponse && descriptionData) {
-      console.log(descriptionData);
       const { price, pictures, title = '', tags } = itemResponse as unknown as Item;
       setItem({ price, pictures, title, tags });
       setDescription(descriptionData as unknown as ResponseDescription);

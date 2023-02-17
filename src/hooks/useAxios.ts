@@ -23,7 +23,6 @@ export const useAxios = (pathToFectch?: string): UseAxiosHook => {
   const [controller, setController] = useState<AbortController>();
 
   const fetchData = async <T extends Response>(path: string): Promise<void> => {
-    console.log(path);
     setResponse(null);
     try {
       const ctrl = new AbortController();
