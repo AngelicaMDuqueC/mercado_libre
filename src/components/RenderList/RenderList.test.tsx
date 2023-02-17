@@ -13,7 +13,7 @@ describe('RenderList', () => {
       <RenderList
         itemList={searchItems}
         render={(item) => {
-          return <div>{item.title}</div>;
+          return <div>{(item as Partial<Item>)?.title}</div>;
         }}
       />
     );

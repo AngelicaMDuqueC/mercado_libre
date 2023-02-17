@@ -1,0 +1,9 @@
+@import '../../assets/styles/variables';
+
+.btn {
+  font-size: $tag-fontSize;
+  font-weight: lighter;
+  background-color: transparent;
+  width: max-content;
+  color: var(--color-black);
+}

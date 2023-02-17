@@ -9,18 +9,22 @@ import style from './RenderList.module.scss';
  * @returns ReactNode
  */
 
-type RenderListProps = {
+type RenderListProps<T> = {
   className?: string;
-  itemList: Partial<Item>[];
-  render: (item: Partial<Item>) => ReactNode;
+  itemList: (T extends (infer U)[] ? U : never)[];
+  render: (item: string | Partial<Item>, index?: number) => ReactNode;
 };
-export const RenderList = ({ className, itemList, render }: RenderListProps) => {
+export const RenderList = <T extends Partial<Item>[] | string[]>({
+  className,
+  itemList,
+  render
+}: RenderListProps<T>) => {
   return (
     <div className={`${style.searchResult} ${className ?? ''}`}>
       {itemList && (
         <ul>
-          {itemList.map((item: Partial<Item>) => {
-            return <li key={item.id}>{render(item)}</li>;
+          {itemList.map((item, index) => {
+            return <li key={index}>{render(item, index)}</li>;
           })}
         </ul>
       )}
