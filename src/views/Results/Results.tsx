@@ -4,6 +4,7 @@ import { useAxios } from 'hooks/useAxios';
 import { Card, Loader, ErrorBoundary } from 'components';
 import { PATHS, FETCHPATH } from 'utils';
 import style from './Results.module.scss';
+import SEO from 'components/Seo/Seo';
 
 const LazyRenderList = lazy(() => import('components/RenderList'));
 
@@ -42,6 +43,7 @@ export const ResultsView = () => {
 
   return (
     <section className={style.results__section}>
+      <SEO title="Resultados" description="Resultados de busqueda" />
       <ErrorBoundary>
         <Suspense fallback={<Loader loadingText="Loading..." />}>
           <LazyRenderList

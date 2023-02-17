@@ -20,14 +20,16 @@ export const RenderList = <T extends Partial<Item>[] | string[]>({
   render
 }: RenderListProps<T>) => {
   return (
-    <div className={`${style.searchResult} ${className ?? ''}`}>
-      {itemList && (
-        <ul>
-          {itemList.map((item, index) => {
-            return <li key={index}>{render(item, index)}</li>;
-          })}
-        </ul>
-      )}
-    </div>
+    <>
+      <div className={`${style.searchResult} ${className ?? ''}`}>
+        {itemList && (
+          <ul>
+            {itemList.map((item, index) => {
+              return <li key={index}>{render(item, index)}</li>;
+            })}
+          </ul>
+        )}
+      </div>
+    </>
   );
 };

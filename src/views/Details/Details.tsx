@@ -4,6 +4,7 @@ import { useLocation } from 'react-router-dom';
 import { useAxios } from 'hooks/useAxios';
 import style from './Details.module.scss';
 import { useEffect } from 'react';
+import SEO from 'components/Seo/Seo';
 
 export const DetailsView = () => {
   const location = useLocation();
@@ -28,6 +29,7 @@ export const DetailsView = () => {
   }, [itemPath, itemResponse, descriptionData]);
   return (
     <section className={style.details__section}>
+      <SEO title="Details" description="Description component" />
       <ErrorBoundary>
         {item && (
           <Card item={item} className={style.details__card} cssClassCard={cssClassCard}>
