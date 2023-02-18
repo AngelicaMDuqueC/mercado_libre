@@ -6,7 +6,6 @@ import style from './Details.module.scss';
 import { useEffect } from 'react';
 import SEO from 'components/Seo/Seo';
 import { Breadcrumbs } from 'components/Breadcrumbs/Breadcrumbs';
-import { PATHS } from 'utils';
 
 export const DetailsView = () => {
   const location = useLocation();
@@ -19,16 +18,12 @@ export const DetailsView = () => {
   };
   const [item, setItem] = useState<Partial<Item> | null>(null);
   const [descripton, setDescription] = useState<ResponseDescription | null>(null);
-  const [paths, setPath] = useState<Path[]>([]);
   const { response: itemResponse } = useAxios(`/items/${encodeURIComponent(itemPath)}`);
   const { response: descriptionData } = useAxios(`/items/${encodeURIComponent(itemPath)}/description`);
 
   useEffect(() => {
     if (itemResponse && descriptionData) {
-      const { price, pictures, title = '', tags, id } = itemResponse as unknown as Item;
-      const itemsPath = PATHS.get('ITEMS');
-      const path = `${itemsPath}/${encodeURIComponent(id)}`;
-      setPath([{ name: id, path }]);
+      const { price, pictures, title = '', tags } = itemResponse as unknown as Item;
       setItem({ price, pictures, title, tags });
       setDescription(descriptionData as unknown as ResponseDescription);
     }
@@ -36,9 +31,9 @@ export const DetailsView = () => {
   return (
     <>
       <SEO title="Details" description="Description component" />
-      <Breadcrumbs className={style.nav} paths={paths} />
-      <section className={style.details__section}>
-        <ErrorBoundary>
+      <ErrorBoundary>
+        <Breadcrumbs className={style.nav} paths={location.state} />
+        <section className={style.details__section}>
           {item && (
             <Card item={item} className={style.details__card} cssClassCard={cssClassCard}>
               {item?.title && item?.pictures && (
@@ -58,8 +53,8 @@ export const DetailsView = () => {
               paragraphClass={style.details__paragraph}
             />
           )}
-        </ErrorBoundary>
-      </section>
+        </section>
+      </ErrorBoundary>
     </>
   );
 };

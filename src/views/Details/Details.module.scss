@@ -1,5 +1,17 @@
 @import '../../assets/styles/main.scss';
 
+.nav {
+  grid-column: center-start / center-end;
+  grid-row: 2 /3;
+  display: flex;
+  flex-direction: row;
+  ul {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+  }
+}
+
 .details {
   &__section {
     display: grid;

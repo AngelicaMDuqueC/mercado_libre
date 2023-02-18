@@ -32,7 +32,7 @@ export const ResultsView = () => {
   const handleNavegate = (id: string) => {
     const itemsPath = PATHS.get('ITEMS');
     const path = `${itemsPath}/${encodeURIComponent(id)}`;
-    navegate(path);
+    navegate(path, { state: paths });
   };
   //TODO : change  with the other fn of useAxios
 
