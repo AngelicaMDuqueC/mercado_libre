@@ -23,8 +23,6 @@ export const DetailsView = () => {
   const { response: itemResponse } = useAxios(`/items/${encodeURIComponent(itemPath)}`);
   const { response: descriptionData } = useAxios(`/items/${encodeURIComponent(itemPath)}/description`);
 
-  console.log(itemResponse, descriptionData);
-
   useEffect(() => {
     if (itemResponse && descriptionData) {
       const { price, pictures, title = '', tags, id } = itemResponse as unknown as Item;

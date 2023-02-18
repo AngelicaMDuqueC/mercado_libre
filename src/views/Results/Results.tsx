@@ -40,7 +40,6 @@ export const ResultsView = () => {
     let paths: string[] = [];
     values[0]?.values.forEach((value: any) => {
       const { path_from_root: pathsv } = value;
-      console.log(pathsv);
       paths = pathsv?.map((root: any) => {
         const { name } = root;
         if (name) {
