@@ -48,7 +48,7 @@ declare global {
     site_id: string;
     query: string;
     results: Item[];
-    filters: Filter;
+    filters: Filter[];
   };
 
   type SugestedQuery = {
@@ -82,4 +82,8 @@ declare global {
     classPrice?: string;
   };
   type HeadingLevel = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'span';
+  type Path = {
+    name: string;
+    path: string;
+  };
 }

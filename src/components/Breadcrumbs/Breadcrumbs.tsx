@@ -1,33 +1,26 @@
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import RenderList from 'components/RenderList';
 import { Button } from 'components';
 import style from './Breadcrumbs.module.scss';
 type Props = {
   className?: string;
+  paths: Path[];
 };
 
-export const Breadcrumbs = ({ className }: Props) => {
-  const location = useLocation();
-  const pathnames = ['Home', ...location.pathname.split('/').filter((x) => x)];
-
+export const Breadcrumbs = ({ className, paths }: Props) => {
   const navigate = useNavigate();
   return (
     <nav className={className}>
       <RenderList
-        itemList={pathnames}
-        render={(item, index) => {
+        itemList={paths}
+        render={(item) => {
           return (
             <Button
-              text={item as string}
               className={style.btn}
+              text={(item as Path)?.name}
               onClick={(e) => {
                 e.preventDefault();
-                const length = pathnames.length;
-                if (typeof index === 'number') {
-                  const to = (index as number) - (length - 1);
-
-                  if (to < 0) navigate(to);
-                }
+                navigate((item as Path)?.path);
               }}
             />
           );

@@ -4,7 +4,6 @@ import { Header } from 'components/Header/Header';
 import { Search } from 'components/Search';
 import { placeholder } from 'utils';
 import styles from './Layout.module.scss';
-import { Breadcrumbs } from 'components/Breadcrumbs/Breadcrumbs';
 
 /**
  * Layout of the app
@@ -19,7 +18,6 @@ export const Layout = () => {
           <Search placeholder={placeholder} />
         </div>
       </Header>
-      <Breadcrumbs className={styles.nav} />
       <main className={`${styles.main__content}`} data-testid="main-content">
         <Outlet context={{ test: 'test' }} />
       </main>

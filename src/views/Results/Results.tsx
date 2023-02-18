@@ -5,6 +5,7 @@ import { Card, Loader, ErrorBoundary } from 'components';
 import { PATHS, FETCHPATH } from 'utils';
 import style from './Results.module.scss';
 import SEO from 'components/Seo/Seo';
+import { Breadcrumbs } from 'components/Breadcrumbs/Breadcrumbs';
 
 const LazyRenderList = lazy(() => import('components/RenderList'));
 
@@ -21,6 +22,7 @@ export const ResultsView = () => {
   };
   const { response, fetchData } = useAxios();
   const [results, setResults] = useState<Item[]>([]);
+  const [paths, setPaths] = useState<any[]>([]);
 
   const getItems = async () => {
     const searchPath = FETCHPATH.get('SEARCH_ITEMS');
@@ -33,36 +35,59 @@ export const ResultsView = () => {
     navegate(path);
   };
   //TODO : change  with the other fn of useAxios
+
+  const createPaths = (values: any[]) => {
+    let paths: string[] = [];
+    values[0]?.values.forEach((value: any) => {
+      const { path_from_root: pathsv } = value;
+      console.log(pathsv);
+      paths = pathsv?.map((root: any) => {
+        const { name } = root;
+        if (name) {
+          const searchPath = PATHS.get('SEARCH');
+          return { name, path: `${searchPath}${encodeURIComponent(name)}` };
+        }
+      });
+      setPaths(paths);
+    });
+  };
   useEffect(() => {
     if (searchQuery) getItems();
   }, [searchQuery]);
 
   useEffect(() => {
-    if (response && 'results' in response) setResults((response as SearchResult)?.results);
+    if (response && 'results' in response) {
+      const { filters, results } = response as SearchResult;
+      createPaths(filters);
+      setResults(results);
+    }
   }, [response]);
 
   return (
-    <section className={style.results__section}>
+    <>
       <SEO title="Resultados" description="Resultados de busqueda" />
-      <ErrorBoundary>
-        <Suspense fallback={<Loader loadingText="Loading..." />}>
-          <LazyRenderList
-            className={style.results__list}
-            itemList={results}
-            render={(item: any) => (
-              <Card
-                item={item}
-                className={style.results__card}
-                cssClassCard={cssClassCard}
-                onClick={() => handleNavegate(item?.id)}
-              >
-                <Card.CardImg title={item.title} imgSrc={item.thumbnail} className={style.card__img} />
-                <Card.PriceAndTitle />
-              </Card>
-            )}
-          />
-        </Suspense>
-      </ErrorBoundary>
-    </section>
+      <Breadcrumbs className={style.nav} paths={paths} />
+      <section className={style.results__section}>
+        <ErrorBoundary>
+          <Suspense fallback={<Loader loadingText="Loading..." />}>
+            <LazyRenderList
+              className={style.results__list}
+              itemList={results}
+              render={(item: any) => (
+                <Card
+                  item={item}
+                  className={style.results__card}
+                  cssClassCard={cssClassCard}
+                  onClick={() => handleNavegate(item?.id)}
+                >
+                  <Card.CardImg title={item.title} imgSrc={item.thumbnail} className={style.card__img} />
+                  <Card.PriceAndTitle />
+                </Card>
+              )}
+            />
+          </Suspense>
+        </ErrorBoundary>
+      </section>
+    </>
   );
 };

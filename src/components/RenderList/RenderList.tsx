@@ -11,14 +11,10 @@ import style from './RenderList.module.scss';
 
 type RenderListProps<T> = {
   className?: string;
-  itemList: (T extends (infer U)[] ? U : never)[];
-  render: (item: string | Partial<Item>, index?: number) => ReactNode;
+  itemList: T extends Partial<Item>[] ? Partial<Item>[] : Path[];
+  render: (item: Path | Partial<Item>, index?: number) => ReactNode;
 };
-export const RenderList = <T extends Partial<Item>[] | string[]>({
-  className,
-  itemList,
-  render
-}: RenderListProps<T>) => {
+export const RenderList = <T extends Partial<Item>[] | Path[]>({ className, itemList, render }: RenderListProps<T>) => {
   return (
     <>
       <div className={`${style.searchResult} ${className ?? ''}`}>

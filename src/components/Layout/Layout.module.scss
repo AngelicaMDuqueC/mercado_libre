@@ -41,18 +41,6 @@
   }
 }
 
-.nav {
-  grid-column: center-start / center-end;
-  grid-row: 2 /3;
-  display: flex;
-  flex-direction: row;
-  ul {
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-  }
-}
-
 .header__search {
   grid-column: col-start 1 / center-end;
   justify-self: center;
@@ -61,5 +49,5 @@
 
 .main__content {
   grid-column: center-start / center-end;
-  grid-row: 3 /-1;
+  grid-row: 2 /-1;
 }
